@@ -81,13 +81,16 @@ describe("Hacker Stories", () => {
     const newTerm = "Cypress";
 
     beforeEach(() => {
+      cy.intercept("GET", `**/search?query=${newTerm}&page=0`).as(
+        "getNewTermStories"
+      );
       cy.get("#search").clear();
     });
 
-    it("types and hits ENTER", () => {
+    it.only("types and hits ENTER", () => {
       cy.get("#search").type(`${newTerm}{enter}`);
 
-      cy.assertLoadingIsShownAndHidden();
+      cy.wait("@getNewTermStories");
 
       cy.get(".item").should("have.length", 20);
       cy.get(".item").first().should("contain", newTerm);
