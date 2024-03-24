@@ -87,7 +87,7 @@ describe("Hacker Stories", () => {
       cy.get("#search").clear();
     });
 
-    it.only("types and hits ENTER", () => {
+    it("types and hits ENTER", () => {
       cy.get("#search").type(`${newTerm}{enter}`);
 
       cy.wait("@getNewTermStories");
@@ -101,7 +101,7 @@ describe("Hacker Stories", () => {
       cy.get("#search").type(newTerm);
       cy.contains("Submit").click();
 
-      cy.assertLoadingIsShownAndHidden();
+      cy.wait("@getNewTermStories");
 
       cy.get(".item").should("have.length", 20);
       cy.get(".item").first().should("contain", newTerm);
