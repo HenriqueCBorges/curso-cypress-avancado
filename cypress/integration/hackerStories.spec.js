@@ -127,7 +127,7 @@ describe("Hacker Stories", () => {
         cy.get(`button:contains(${initialTerm})`).should("be.visible");
       });
 
-      it.only("types and clicks the submit button", () => {
+      it("types and clicks the submit button", () => {
         cy.get("#search").type(newTerm);
         cy.contains("Submit").click();
 
@@ -151,7 +151,9 @@ describe("Hacker Stories", () => {
         it("shows a max of 5 buttons for the last searched terms", () => {
           const faker = require("faker");
 
-          cy.intercept("GET", "**/search**").as("getRamdomStories");
+          cy.intercept("GET", "**/search**", { fixture: "empty" }).as(
+            "getRamdomStories"
+          );
 
           Cypress._.times(6, () => {
             cy.get("#search").clear().type(`${faker.random.word()}{enter}`);
