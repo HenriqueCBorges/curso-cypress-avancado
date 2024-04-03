@@ -44,7 +44,11 @@ describe("Hacker Stories", () => {
 
       cy.wait("@getNewTermStories");
 
+      cy.getLocalStorage("search").should("be.equal", newTerm);
+
       cy.get(`button:contains(${initialTerm})`).should("be.visible").click();
+
+      cy.getLocalStorage("search").should("be.equal", initialTerm);
 
       cy.wait("@getStories");
 
@@ -227,6 +231,8 @@ describe("Hacker Stories", () => {
 
         cy.wait("@getStories");
 
+        cy.getLocalStorage("search").should("be.equal", newTerm);
+
         cy.get(".item").should("have.length", 2);
         cy.get(`button:contains(${initialTerm})`).should("be.visible");
       });
@@ -236,6 +242,8 @@ describe("Hacker Stories", () => {
         cy.contains("Submit").should("be.visible").click();
 
         cy.wait("@getStories");
+
+        cy.getLocalStorage("search").should("be.equal", newTerm);
 
         cy.get(".item").should("have.length", 2);
         cy.get(`button:contains(${initialTerm})`).should("be.visible");
@@ -260,8 +268,11 @@ describe("Hacker Stories", () => {
           );
 
           Cypress._.times(6, () => {
-            cy.get("#search").clear().type(`${faker.random.word()}{enter}`);
+            const ramdomWord = faker.random.word();
+            cy.get("#search").clear().type(`${ramdomWord}{enter}`);
             cy.wait("@getRamdomStories");
+
+            cy.getLocalStorage("search").should("be.equal", ramdomWord);
           });
 
           cy.get(".last-searches").within(() => {
